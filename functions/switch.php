@@ -2,6 +2,7 @@
 
 require __FUNCTION__ . "add.php";
 require __FUNCTION__ . "update.php";
+require __FUNCTION__ . "delete.php";
 
 function verifyCommand(string $command) {
     switch ($command) {
@@ -12,7 +13,7 @@ function verifyCommand(string $command) {
             update($command);
             break;
         case str_contains($command, "delete"):
-            // todo delete
+            delete($command);
             break;
         case str_contains($command, "mark-in-progress"):
             // todo mark-in-progress
