@@ -1,7 +1,7 @@
 <?php
 
 function initializeData() {
-    $dataPath = __DIR__ . "/data/tasks.json";
+    $dataPath = dirname(__DIR__) . "/data/tasks.json";
     if (!file_exists($dataPath)) {
         $dirName = dirname($dataPath);
         mkdir($dirName, 0777, true);
