@@ -1,11 +1,10 @@
 <?php
 
 require_once __FUNCTION__ . "command-handler.php";
-require_once dirname(__FUNCTION__) . "repositories/repository.php";
 
-function delete(string $command) {
+function markInProgress(string $command) {
     try {
-        $id = getTaskId($command, "delete");
+        $id = getTaskId($command, "mark-in-progress");
         if (!$id) return;
 
         $repository = new Repository();
@@ -13,11 +12,12 @@ function delete(string $command) {
         $taskList = array_map(function($task) {
             return TaskDto::fromArray($task);
         }, $data);
-        $taskPosition = null;
 
         foreach ($taskList as $key => &$task) {
             if ($task->id === $id) {
-                $taskPosition = $key;
+                $auxTask = $task->toEntity();
+                $auxTask->markAsInProgress();
+                $task = $auxTask->toTaskDto();
                 break;
             } else if ($key == array_key_last($taskList)) {
                 echo "Task not found\n";
@@ -25,11 +25,9 @@ function delete(string $command) {
             }
         }
 
-        array_splice($taskList, $taskPosition, 1);
-
         $repository->saveData($taskList);
 
-        echo "Task Id $id was deleted\n";
+        echo "Task Id $id is in-progress\n";
     } catch (error $error) {
         echo $error."\n";
     }

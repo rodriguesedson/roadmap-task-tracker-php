@@ -36,6 +36,6 @@ function update(string $command) {
 
         echo "Task Id $id was updated\n";
     } catch (error $error) {
-        echo $error;
+        echo $error."\n";
     }
 }
