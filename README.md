@@ -23,14 +23,12 @@ sudo apt install php8.3 -y
 ## Commands
 - exit
 - clear
-- add "task description"
-- update taskId "new task description"
-
-### Work in progress
-- delete taskId
-- mark-in-progress taskId
-- mark-done taskId
-- list
-- list done
-- list todo
+- add :description
+- update :taskId :description
+- mark-in-progress :taskId
+- mark-done :taskId
+- delete :taskId
 - list in-progress
+- list todo
+- list done
+- list
