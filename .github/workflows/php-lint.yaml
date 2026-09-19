@@ -1,0 +1,22 @@
+name: PHP Lint
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    - name: Configurar ambiente PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.5'
+        tools: phplint
+
+    - name: Executar PHP Lint
+      run: phplint ./ --exclude=vendor
