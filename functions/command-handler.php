@@ -1,5 +1,17 @@
 <?php
 
+function getFunctionName(string $command) {
+    $wordsList = explode(" ", trim($command));
+    $functionName = $wordsList[0];
+    $listCommands = ["todo", "in-progress", "done"];
+    if ($functionName === "list") {
+        $secondTerm = $wordsList[1];
+        if (in_array($secondTerm, $listCommands, true))
+            $functionName = "$functionName $secondTerm";
+    }
+    return $functionName;
+}
+
 function getContent(string $command, string $functionName) {
     $pattern = "/".preg_quote($functionName)."/";
     return trim(preg_replace($pattern, "", $command, 1));
