@@ -33,6 +33,26 @@ class TaskService {
         }
     }
 
+    function modifyStatusByFunction(array $taskList, int $id, string $functionName, string|null $arg = null) {
+        try {
+            foreach ($taskList as $key => &$task) {
+                if ($task->id === $id) {
+                    $entity = $task->toEntity();
+                    $entity->$functionName($arg);
+                    $task = $entity->toTaskDto();
+                    break;
+                } else if ($key === array_key_last($taskList)) {
+                    echo "Task not found\n";
+                    return;
+                }
+            }
+            unset($task);
+            return $taskList;
+        } catch (error $error) {
+            echo $error."\n";
+        }
+    }
+
     function update(string $command) {
         try {
             [$id, $newDescription] = getIdAndDescription($command, "update");
@@ -42,23 +62,9 @@ class TaskService {
                 return;
             }
 
-            $data = $this->repository->getFileData();
-            $taskList = array_map(function($task) {
-                return TaskDto::fromArray($task);
-            }, $data);
+            $taskList = $this->getTaskDtoList();
 
-            foreach ($taskList as $key => &$task) {
-                if ($task->id === $id) {
-                    $entity = $task->toEntity();
-                    $entity->updateTask($newDescription);
-                    $task = $entity->toTaskDto();
-                    break;
-                } else if ($key === array_key_last($taskList)) {
-                    echo "Task not found\n";
-                    return;
-                }
-            }
-            unset($task);
+            $taskList = $this->modifyStatusByFunction($taskList, $id, "updateTask", $newDescription);
 
             $this->repository->saveData($taskList);
 
@@ -73,22 +79,9 @@ class TaskService {
             $id = getTaskId($command, "mark-in-progress");
             if (!$id) return;
 
-            $data = $this->repository->getFileData();
-            $taskList = array_map(function($task) {
-                return TaskDto::fromArray($task);
-            }, $data);
+            $taskList = $this->getTaskDtoList();
 
-            foreach ($taskList as $key => &$task) {
-                if ($task->id === $id) {
-                    $auxTask = $task->toEntity();
-                    $auxTask->markAsInProgress();
-                    $task = $auxTask->toTaskDto();
-                    break;
-                } else if ($key == array_key_last($taskList)) {
-                    echo "Task not found\n";
-                    return;
-                }
-            }
+            $taskList = $this->modifyStatusByFunction($taskList, $id, "markAsInProgress");
 
             $this->repository->saveData($taskList);
 
@@ -103,22 +96,9 @@ class TaskService {
             $id = getTaskId($command, "mark-done");
             if (!$id) return;
 
-            $data = $this->repository->getFileData();
-            $taskList = array_map(function($task) {
-                return TaskDto::fromArray($task);
-            }, $data);
+            $taskList = $this->getTaskDtoList();
 
-            foreach ($taskList as $key => &$task) {
-                if ($task->id === $id) {
-                    $auxTask = $task->toEntity();
-                    $auxTask->markAsDone();
-                    $task = $auxTask->toTaskDto();
-                    break;
-                } else if ($key == array_key_last($taskList)) {
-                    echo "Task not found\n";
-                    return;
-                }
-            }
+            $taskList = $this->modifyStatusByFunction($taskList, $id, "markAsDone");
 
             $this->repository->saveData($taskList);
 
@@ -133,23 +113,10 @@ class TaskService {
             $id = getTaskId($command, "delete");
             if (!$id) return;
 
-            $data = $this->repository->getFileData();
-            $taskList = array_map(function($task) {
-                return TaskDto::fromArray($task);
-            }, $data);
+            $taskList = $this->getTaskDtoList();
 
-            foreach ($taskList as $key => &$task) {
-                if ($task->id === $id) {
-                    $auxTask = $task->toEntity();
-                    $auxTask->delete();
-                    $task = $auxTask->toTaskDto();
-                    break;
-                } else if ($key == array_key_last($taskList)) {
-                    echo "Task not found\n";
-                    return;
-                }
-            }
-
+            $taskList = $this->modifyStatusByFunction($taskList, $id, "delete");
+            
             $this->repository->saveData($taskList);
 
             echo "Task Id $id was deleted\n";
