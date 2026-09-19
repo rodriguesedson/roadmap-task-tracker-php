@@ -27,6 +27,11 @@ class Task{
         $this->updatedAt = new DateTime();
     }
 
+    public function delete() {
+        $this->status = Status::Deleted;
+        $this->updatedAt = new DateTime();
+    }
+
     public function toString() {
         return "Id: $this->id\nDescription: $this->description\nStatus: $this->status\nCreatedAt: $this->createdAt\nUpdatedAt: $this->updatedAt";
     }

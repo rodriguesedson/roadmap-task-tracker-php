@@ -137,19 +137,18 @@ class TaskService {
             $taskList = array_map(function($task) {
                 return TaskDto::fromArray($task);
             }, $data);
-            $taskPosition = null;
 
             foreach ($taskList as $key => &$task) {
                 if ($task->id === $id) {
-                    $taskPosition = $key;
+                    $auxTask = $task->toEntity();
+                    $auxTask->delete();
+                    $task = $auxTask->toTaskDto();
                     break;
                 } else if ($key == array_key_last($taskList)) {
                     echo "Task not found\n";
                     return;
                 }
             }
-
-            array_splice($taskList, $taskPosition, 1);
 
             $this->repository->saveData($taskList);
 
@@ -192,7 +191,8 @@ class TaskService {
         echo "All tasks:\n";
 
         foreach ($taskList as &$task) {
-            echo "Id: $task->id\nTask: $task->description\nStatus: $task->status\nCreated $task->createdAt - Updated $task->updatedAt\n\n";
+            if (Status::tryFrom($task->status) !== Status::Deleted)
+                echo "Id: $task->id\nTask: $task->description\nStatus: $task->status\nCreated $task->createdAt - Updated $task->updatedAt\n\n";
         }
 
         echo "End\n";
