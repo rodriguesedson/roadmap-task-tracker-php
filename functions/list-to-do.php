@@ -10,7 +10,7 @@ function listToDo() {
             return TaskDto::fromArray($task);
         }, $data);
 
-        echo "Todo list:\n";
+        echo "Tasks todo list:\n";
         
         foreach ($taskList as &$task) {
             if (Status::tryFrom($task->status) === Status::Todo) {

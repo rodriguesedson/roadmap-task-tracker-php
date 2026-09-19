@@ -9,6 +9,7 @@ require __FUNCTION__ . "mark-done.php";
 require __FUNCTION__ . "list-to-do.php";
 require __FUNCTION__ . "list.php";
 require __FUNCTION__ . "list-in-progress.php";
+require __FUNCTION__ . "list-done.php";
 
 function verifyCommand(string $command) {
     $functionName = getFunctionName($command);
@@ -35,7 +36,7 @@ function verifyCommand(string $command) {
             listInProgress();
             break;
         case $functionName === "list done":
-            // todo list done
+            listDone();
             break;
         case $functionName === "list":
             listAll();

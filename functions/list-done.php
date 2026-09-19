@@ -1,8 +1,6 @@
 <?php
 
-require_once dirname(__CLASS__) . "enums/status.php";
-
-function listInProgress() {
+function listDone() {
     try {
         $repository = new Repository();
         $data = $repository->getFileData();
@@ -10,10 +8,10 @@ function listInProgress() {
             return TaskDto::fromArray($task);
         }, $data);
 
-        echo "Tasks in-progress list:\n";
+        echo "Tasks done list:\n";
         
         foreach ($taskList as &$task) {
-            if (Status::tryFrom($task->status) === Status::InProgress) {
+            if (Status::tryFrom($task->status) === Status::Done) {
                 echo "Id: $task->id\nTask: $task->description\nStatus: $task->status\nCreated $task->createdAt - Updated $task->updatedAt\n\n";
             }
             else
