@@ -2,7 +2,7 @@
 
 require_once dirname(__CLASS__) . "enums/status.php";
 
-function listToDo() {
+function listInProgress() {
     try {
         $repository = new Repository();
         $data = $repository->getFileData();
@@ -10,10 +10,10 @@ function listToDo() {
             return TaskDto::fromArray($task);
         }, $data);
 
-        echo "Todo list:\n";
+        echo "InProgress list:\n";
         
         foreach ($taskList as &$task) {
-            if (Status::tryFrom($task->status) === Status::Todo) {
+            if (Status::tryFrom($task->status) === Status::InProgress) {
                 echo "Id: $task->id\nTask: $task->description\nStatus: $task->status\nCreated $task->createdAt - Updated $task->updatedAt\n\n";
             }
             else
