@@ -1,45 +1,36 @@
 <?php
 
-require __FUNCTION__ . "command-handler.php";
-require __FUNCTION__ . "add.php";
-require __FUNCTION__ . "update.php";
-require __FUNCTION__ . "delete.php";
-require __FUNCTION__ . "mark-in-progress.php";
-require __FUNCTION__ . "mark-done.php";
-require __FUNCTION__ . "list-to-do.php";
-require __FUNCTION__ . "list.php";
-require __FUNCTION__ . "list-in-progress.php";
-require __FUNCTION__ . "list-done.php";
+require_once dirname(__CLASS__) . "services/task-service.php";
 
-function verifyCommand(string $command) {
+function verifyCommand(string $command, TaskService $taskService) {
     $functionName = getFunctionName($command);
     switch ($command) {
         case $functionName === "add":
-            add($command);
+            $taskService->add($command);
             break;
         case $functionName === "update":
-            update($command);
+            $taskService->update($command);
             break;
         case $functionName === "delete":
-            delete($command);
+            $taskService->delete($command);
             break;
         case $functionName === "mark-in-progress":
-            markInProgress($command);
+            $taskService->markInProgress($command);
             break;
         case $functionName === "mark-done":
-            markDone($command);
+            $taskService->markDone($command);
             break;
         case $functionName === "list todo":
-            listToDo();
+            $taskService->listToDo();
             break;
         case $functionName === "list in-progress":
-            listInProgress();
+            $taskService->listInProgress();
             break;
         case $functionName === "list done":
-            listDone();
+            $taskService->listDone();
             break;
         case $functionName === "list":
-            listAll();
+            $taskService->listAll();
             break;
         default:
             echo "Invalid command\n";

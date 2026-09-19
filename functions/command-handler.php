@@ -4,7 +4,7 @@ function getFunctionName(string $command) {
     $wordsList = explode(" ", trim($command));
     $functionName = $wordsList[0];
     $listCommands = ["todo", "in-progress", "done"];
-    if ($functionName === "list") {
+    if ($functionName === "list" && count($wordsList) > 1) {
         $secondTerm = $wordsList[1];
         if (in_array($secondTerm, $listCommands, true))
             $functionName = "$functionName $secondTerm";
